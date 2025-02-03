@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { MoviesProvider } from './movies/provider';
+import { SpecificMovieProvider } from './specificMovie/provider';
 
-const providers = [MoviesProvider];
+const providers = [MoviesProvider, SpecificMovieProvider];
 
 export const ContextProvider = ({ children }: React.PropsWithChildren) => (
   <>
