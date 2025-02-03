@@ -1,0 +1,242 @@
+openapi: 3.1.0
+info:
+  title: Movie Search and Details API
+  description: API specification for the Movie Search and Details Application
+  version: 1.0.0
+paths:
+  /movies:
+    get:
+      summary: Get a paginated list of movies using the search query
+      description: Returns a paginated list of movies that can be filtered using releaseDate, title, genre, e.t.c.
+      parameters:
+        - name: title
+          in: query
+          required: false
+          description: The title of the movie to search for
+          schema:
+            type: string
+        - name: genres
+          in: query
+          required: false
+          description: A list of movie genres to filter by
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Genre'
+        - name: releaseDate
+          in: query
+          required: false
+          description: Filter movies by releaseDate (e.g., 2022, 2023)
+          schema:
+            type: string
+            format: date
+        - name: rating
+          in: query
+          required: false
+          description: Filter movies by rating (e.g., >= 7.0)
+          schema:
+            type: array
+            items:
+              type: number
+              format: float
+        - name: page
+          in: query
+          description: The page number to retrieve
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: A list of movies matching the search query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movies'
+        '400':
+          description: Invalid request (e.g incorrect page or pageSize)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /favorites:
+    get:
+      summary: Retrieve the user's list of favorite movies
+      responses:
+        '200':
+          description: A list of favorite movies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movies'
+    delete:
+      summary: Remove a movie from the favorites list
+      parameters:
+        - name: movieId
+          in: query
+          required: true
+          description: The ID of the movie to remove from favorites
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Movie successfully removed from favorites
+          '400':
+            description: Invalid request
+            content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          '500':
+            description: Internal Server error
+            content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Movies:
+      type: object
+      required:
+        - data
+        - pagination
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - title
+              - description
+              - images
+              - releaseDate
+              - rating
+              - genres
+              - country
+              - castCrew
+              - directors
+              - usCertificates
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+                example: You
+              description:
+                type: string
+                example: Short Summary about this movie
+              images:
+                type: array
+                items:
+                  type: string
+              releaseDate:
+                type: string
+              rating:
+                type: number
+                format: float
+                example: 4.3
+              genres:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+              country:
+                type: string
+              castCrew:
+                type: array
+                items:
+                  type: string
+              directors:
+                type: array
+                items:
+                  type: string
+              usCertificates:
+                type: array
+                items:
+                  type: string
+
+        pagination:
+          type: object
+          required:
+            - page
+            - totalPages
+            - hasNext
+            - hasPrevious
+            - pageSize
+          properties:
+            page:
+              type: integer
+              minimum: 1
+              maximum: 20
+            totalPages:
+              type: integer
+              example: 6
+            hasNext:
+              type: boolean
+              example: true
+            hasPrevious:
+              type: boolean
+              example: false
+            pageSize:
+              type: boolean
+              example: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Bad Request'
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    example: 'page'
+                  issues:
+                    type: string
+                    example: 'Page must be a positive integer'
+    Genre:
+      type: string
+      enum:
+        - Action
+        - Adventure
+        - Animation
+        - Comedy
+        - Drama
+        - Horror
+        - Thriller
+        - Sci-Fi
+        - Fantasy
+        - Romance
+        - Mystery
+        - Crime
+        - Documentary
+        - Musical
+        - Historical
+        - Culture
+        - War
+        - Biography
+        - Western
+        - Family
+        - Sport
