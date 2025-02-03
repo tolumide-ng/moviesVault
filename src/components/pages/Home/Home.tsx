@@ -37,66 +37,64 @@ export default function Home() {
 
   return (
     <Box as="article" p={4}>
-      <>
-        <Flex mb={16} justifyContent="center" width={'100%'}>
-          <SearchBar
-            formData={searchBarOptions}
-            onChange={onChange}
-            onSelect={onSelect}
-          />
-        </Flex>
+      <Flex mb={16} justifyContent="center" width={'100%'}>
+        <SearchBar
+          formData={searchBarOptions}
+          onChange={onChange}
+          onSelect={onSelect}
+        />
+      </Flex>
 
-        <UnorderedList
-          display={'flex'}
-          flexWrap="wrap"
-          justifyContent="center"
-          gap={6}
-          mb={8}
-          listStyleType={'none'}
-        >
-          {movies.map((movie) => (
-            <ListItem
-              key={movie.id}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              p={2}
-            >
-              <Link to={`/movies/${movie.id}`}>
-                <MovieCard
-                  movie={movie}
-                  onClick={toggleFavoriteMovie}
-                  isLoggedIn={isLoggedIn}
-                />
-              </Link>
-            </ListItem>
-          ))}
-        </UnorderedList>
+      <UnorderedList
+        display={'flex'}
+        flexWrap="wrap"
+        justifyContent="center"
+        gap={6}
+        mb={8}
+        listStyleType={'none'}
+      >
+        {movies.map((movie) => (
+          <ListItem
+            key={movie.id}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            p={2}
+          >
+            <Link to={`/movies/${movie.id}`}>
+              <MovieCard
+                movie={movie}
+                onClick={toggleFavoriteMovie}
+                isLoggedIn={isLoggedIn}
+              />
+            </Link>
+          </ListItem>
+        ))}
+      </UnorderedList>
 
-        {status === Status.Success && (
-          <Stack direction="row" spacing={4} justifyContent="center" mt={8}>
-            <Button
-              onClick={onPreviousPage}
-              disabled={currentPage <= 1}
-              variant="outline"
-              colorScheme="teal"
-              aria-label="Previous Page"
-            >
-              Previous
-            </Button>
+      {status === Status.Success && (
+        <Stack direction="row" spacing={4} justifyContent="center" mt={8}>
+          <Button
+            onClick={onPreviousPage}
+            disabled={currentPage <= 1}
+            variant="outline"
+            colorScheme="teal"
+            aria-label="Previous Page"
+          >
+            Previous
+          </Button>
 
-            <Button
-              onClick={onNextPage}
-              disabled={!hasNextPage || status !== Status.Success}
-              variant="outline"
-              colorScheme="teal"
-              aria-label="Next Page"
-            >
-              Next
-            </Button>
-          </Stack>
-        )}
-      </>
+          <Button
+            onClick={onNextPage}
+            disabled={!hasNextPage || status !== Status.Success}
+            variant="outline"
+            colorScheme="teal"
+            aria-label="Next Page"
+          >
+            Next
+          </Button>
+        </Stack>
+      )}
 
       {status === Status.Loading && <Loader />}
       {status === Status.Error && (

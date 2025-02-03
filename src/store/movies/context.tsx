@@ -1,12 +1,8 @@
 import * as React from 'react';
-import { components } from '@/types/generated/schema';
-import { FilterData } from '@/types/manual/movies';
+import { FilterData, Movie } from '@/types/manual/movies';
 import { Status } from '@/types/manual/status';
 
-export type MoviesByPage = Record<
-  number,
-  components['schemas']['Movies']['data']
->;
+export type MoviesByPage = Record<number, Array<Movie>>;
 
 export type MoviesState = {
   status: Status;
@@ -18,7 +14,7 @@ export type MoviesState = {
 };
 
 export type StoreMovies = {
-  currentPageMovies: components['schemas']['Movies']['data'];
+  currentPageMovies: Array<Movie>;
   currentPage: number;
   onPreviousPage: () => void;
   onNextPage: () => void;
