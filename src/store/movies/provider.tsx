@@ -4,7 +4,7 @@ import { apiCall } from '@/utils/apiCall';
 import { MoviesContext, MoviesState } from './context';
 import { FilterData, Movie } from '@/types/manual/movies';
 import { MOVIES_PER_PAGE, TOTAL_MOVIES } from '@/utils/constants';
-import { usePagination } from '@/utils/hooks/usePagination';
+import { usePagination } from '@/utils/hooks/usePagination/usePagination';
 import { handleError } from '@/utils/handleError';
 
 export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
