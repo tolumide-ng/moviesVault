@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom';
 import { act, renderHook } from '@testing-library/react';
-import { useHomePage } from './useHome';
+import { useHome } from './useHome';
 import { TestWrapper } from '@/utils/testUtils';
 
 describe('useHome Hook', () => {
   it('should intialize correctly', () => {
-    const { result } = renderHook(() => useHomePage(jest.fn(), []), {
+    const { result } = renderHook(() => useHome(jest.fn(), []), {
       wrapper: TestWrapper,
     });
 
@@ -14,7 +14,7 @@ describe('useHome Hook', () => {
   });
 
   it('should update title on change', () => {
-    const { result } = renderHook(() => useHomePage(jest.fn(), []));
+    const { result } = renderHook(() => useHome(jest.fn(), []));
 
     act(() =>
       result.current.onChange({
@@ -25,7 +25,7 @@ describe('useHome Hook', () => {
   });
 
   it('should call onSelect method', () => {
-    const { result } = renderHook(() => useHomePage(jest.fn(), []));
+    const { result } = renderHook(() => useHome(jest.fn(), []));
 
     act(() =>
       result.current.onSelect('genres', [{ label: 'comedy', value: 'comedy' }]),

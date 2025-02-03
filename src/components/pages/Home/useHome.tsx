@@ -13,7 +13,7 @@ import { useDebounce } from '@/utils/hooks/useDebounce/useDebounce';
 import { DEBOUNCE_DELAY } from '@/utils/constants';
 import { FavoriteMoviesContext } from '@/store/favorites/context';
 
-export const useHomePage = (
+export const useHome = (
   onFilterChange: StoreMovies['onFilterChange'],
   currentPageMovies: Array<Movie>,
 ) => {
@@ -33,7 +33,7 @@ export const useHomePage = (
     () =>
       currentPageMovies?.map((movie) => ({
         ...movie,
-        favorite: favorites.findIndex((fav) => fav.id === movie.id) > -1,
+        favorite: favorites?.findIndex((fav) => fav.id === movie.id) > -1,
       })),
     [favorites, currentPageMovies],
   );
