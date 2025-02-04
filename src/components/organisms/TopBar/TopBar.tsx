@@ -51,7 +51,7 @@ export function TopBar() {
                 as={Link}
                 color={isActive ? 'blue.500' : 'gray.700'}
               >
-                <Text>Favorites</Text>
+                Favorites
               </ChakraLink>
             </ListItem>
           )}
@@ -66,8 +66,8 @@ export function TopBar() {
 
           {!state.isLoggedIn && !isLoginPage && (
             <ListItem>
-              <ChakraLink as={Link} to="login">
-                <Text>Login</Text>
+              <ChakraLink as={Link} to="login" mr={4} w={'100%'}>
+                Login
               </ChakraLink>
             </ListItem>
           )}
