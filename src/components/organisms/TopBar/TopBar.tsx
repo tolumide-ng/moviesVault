@@ -12,7 +12,9 @@ import {
 
 export function TopBar() {
   const { state, onLogout } = React.useContext(AuthorizationContext);
-  const isLoginPage = useLocation().pathname === '/login';
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+  const isActive = location.pathname === '/favorites';
 
   return (
     <Flex
@@ -44,7 +46,11 @@ export function TopBar() {
         <UnorderedList display="flex" gap="6" listStyleType="none">
           {state.isLoggedIn && (
             <ListItem>
-              <ChakraLink to="/favorites" as={Link}>
+              <ChakraLink
+                to="/favorites"
+                as={Link}
+                color={isActive ? 'blue.500' : 'gray.700'}
+              >
                 <Text>Favorites</Text>
               </ChakraLink>
             </ListItem>

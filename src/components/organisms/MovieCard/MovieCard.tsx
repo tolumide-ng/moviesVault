@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Box, Image, Text, Flex } from '@chakra-ui/react';
 import { FavoriteMovie } from '@/types/manual/movies';
 import { FavoriteButton } from '@/components/molecules/FavoriteButton/FavoriteButton';
+import { dateFormatter } from '@/utils/dateFormatter';
 
 type Props = {
   movie: FavoriteMovie;
@@ -21,7 +22,7 @@ function MovieCard({ movie, onClick, isLoggedIn }: Readonly<Props>) {
       borderRadius="md"
       overflow="hidden"
       boxShadow="lg"
-      width="22rem"
+      width={{ base: '22rem', md: '23rem' }}
     >
       <Box position="relative">
         <Image
@@ -52,7 +53,12 @@ function MovieCard({ movie, onClick, isLoggedIn }: Readonly<Props>) {
             </Text>
           </Box>
 
-          {isLoggedIn && <FavoriteButton onClick={onClick} movie={movie} />}
+          <Flex align={'flex-end'} justify={'space-between'}>
+            <Text fontWeight={'bold'} fontSize={'14'}>
+              {dateFormatter(movie.releaseDate)}
+            </Text>
+            {isLoggedIn && <FavoriteButton onClick={onClick} movie={movie} />}
+          </Flex>
         </Flex>
       </Box>
     </Box>

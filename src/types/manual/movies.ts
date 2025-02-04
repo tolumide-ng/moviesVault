@@ -44,7 +44,7 @@ export type Movie = components['schemas']['Movies']['data'][0];
 
 export type FilterData = {
   title: string;
-  rating: Rating | null;
+  rating: Array<Rating> | null;
   genres: Array<Genre>;
   usCertificates: Array<UsCertificate>;
 };

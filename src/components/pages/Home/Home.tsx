@@ -1,21 +1,13 @@
 import * as React from 'react';
 import { SearchBar } from '@/components/organisms/SearchBar/SearchBar';
 import { MoviesContext } from '@/store/movies/context';
-import {
-  Button,
-  Box,
-  Stack,
-  Flex,
-  UnorderedList,
-  ListItem,
-} from '@chakra-ui/react';
-import MovieCard from '@/components/organisms/MovieCard/MovieCard';
-import { Link } from 'react-router';
+import { Button, Box, Stack, Flex, Text } from '@chakra-ui/react';
 import { AuthorizationContext } from '@/store/authorization/context';
 import { Status } from '@/types/manual/status';
 import { Loader } from '@/components/molecules/Loader/Loader';
 import { Notification } from '@/components/molecules/Notification/Notification';
 import { useHome } from './useHome';
+import MovieList from '@/components/organisms/MovieList/MovieList';
 
 export default function Home() {
   const {
@@ -44,36 +36,19 @@ export default function Home() {
           onSelect={onSelect}
         />
       </Flex>
-
-      <UnorderedList
-        display={'flex'}
-        flexWrap="wrap"
-        justifyContent="center"
-        gap={6}
-        mb={8}
-        listStyleType={'none'}
-      >
-        {movies.map((movie) => (
-          <ListItem
-            key={movie.id}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            p={2}
-          >
-            <Link to={`/movies/${movie.id}`}>
-              <MovieCard
-                movie={movie}
-                onClick={toggleFavoriteMovie}
-                isLoggedIn={isLoggedIn}
-              />
-            </Link>
-          </ListItem>
-        ))}
-      </UnorderedList>
-
+      <MovieList
+        movies={movies}
+        isLoggedIn={isLoggedIn}
+        toggleFavoriteMovie={toggleFavoriteMovie}
+      />
       {status === Status.Success && (
-        <Stack direction="row" spacing={4} justifyContent="center" mt={8}>
+        <Stack
+          direction="row"
+          spacing={4}
+          justifyContent="center"
+          mt={8}
+          align={'center'}
+        >
           <Button
             onClick={onPreviousPage}
             disabled={currentPage <= 1}
@@ -83,7 +58,7 @@ export default function Home() {
           >
             Previous
           </Button>
-
+          <Text>Page {currentPage}</Text>
           <Button
             onClick={onNextPage}
             disabled={!hasNextPage || status !== Status.Success}
@@ -95,7 +70,6 @@ export default function Home() {
           </Button>
         </Stack>
       )}
-
       {status === Status.Loading && <Loader />}
       {status === Status.Error && (
         <Notification message="Please try again later" />

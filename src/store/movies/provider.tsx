@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Status } from '@/types/manual/status';
 import { apiCall } from '@/utils/apiCall';
-import { MoviesContext, MoviesState } from './context';
+import { areFiltersEqual, MoviesContext, MoviesState } from './context';
 import { FilterData, Movie } from '@/types/manual/movies';
 import { MOVIES_PER_PAGE, TOTAL_MOVIES } from '@/utils/constants';
-import { usePagination } from '@/utils/hooks/usePagination/usePagination';
 import { handleError } from '@/utils/handleError';
 
 export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
@@ -17,8 +16,18 @@ export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
     error: null,
   });
 
-  const { currentPage, onNextPage, onPreviousPage } = usePagination(
-    state.currentPage,
+  const onNextPage = React.useCallback(
+    () => setState((prev) => ({ ...prev, currentPage: prev.currentPage + 1 })),
+    [],
+  );
+
+  const onPreviousPage = React.useCallback(
+    () =>
+      setState((prev) => ({
+        ...prev,
+        currentPage: Math.max(prev.currentPage - 1, 1),
+      })),
+    [],
   );
 
   const fetchMovies = React.useCallback(async () => {
@@ -48,7 +57,7 @@ export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
         lastFetchedPage: state.currentPage,
         moviesByPage: {
           ...prevState.moviesByPage,
-          [prevState.currentPage]: response ?? [],
+          [state.currentPage]: response ?? [],
         },
       }));
     } catch (error) {
@@ -60,16 +69,22 @@ export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
     }
   }, [state.currentPage, state.filter]);
 
-  const onFilterChange = React.useCallback((filter: FilterData) => {
-    setState({
-      status: Status.Rest,
-      filter,
-      lastFetchedPage: 0,
-      currentPage: 1,
-      moviesByPage: {},
-      error: null,
-    });
-  }, []);
+  const onFilterChange = React.useCallback(
+    (filter: FilterData) => {
+      if (state.filter && areFiltersEqual(state.filter, filter)) {
+        return;
+      }
+      setState({
+        status: Status.Rest,
+        filter,
+        lastFetchedPage: 0,
+        currentPage: 1,
+        moviesByPage: {},
+        error: null,
+      });
+    },
+    [state.filter],
+  );
 
   React.useEffect(() => {
     if (!state.moviesByPage[state.currentPage] && state.filter) {
@@ -79,7 +94,7 @@ export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
 
   const valueProps = React.useMemo(
     () => ({
-      currentPage,
+      currentPage: state.currentPage,
       onPreviousPage,
       onNextPage,
       onFilterChange,
@@ -90,12 +105,11 @@ export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
     }),
     [
       state.status,
-      state.currentPage,
       state.moviesByPage,
       onFilterChange,
       onNextPage,
       onPreviousPage,
-      currentPage,
+      state.currentPage,
     ],
   );
 

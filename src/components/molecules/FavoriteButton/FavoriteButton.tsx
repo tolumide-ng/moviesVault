@@ -21,9 +21,8 @@ export function FavoriteButton({ onClick, movie }: Readonly<Props>) {
     <Button
       onClick={handleClick}
       variant={movie.favorite ? 'solid' : 'outline'}
-      width="52"
+      width="48"
       alignSelf="flex-end"
-      mt={2}
       leftIcon={
         movie.favorite ? (
           <Icon as={AiOutlineDelete} boxSize={5} />

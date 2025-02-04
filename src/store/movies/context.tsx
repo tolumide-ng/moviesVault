@@ -23,6 +23,18 @@ export type StoreMovies = {
   hasNextPage: boolean;
 };
 
+export const areFiltersEqual = (
+  prev: FilterData,
+  next: FilterData,
+): boolean => {
+  return (
+    prev.title === next.title &&
+    prev.rating?.toString() === next.rating?.toString() &&
+    prev.genres.toString() === next.genres.toString() &&
+    prev.usCertificates.toString() === next.usCertificates.toString()
+  );
+};
+
 export const MoviesContext = React.createContext<StoreMovies>(
   {} as StoreMovies,
 );

@@ -1,3 +1,4 @@
+import { dateFormatter } from '@/utils/dateFormatter';
 import {
   Tag,
   Text,
@@ -13,19 +14,13 @@ type Props = {
 };
 
 export function MovieDetail({ releaseDate, usCertificates }: Readonly<Props>) {
-  const date = new Intl.DateTimeFormat(navigator.language, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(releaseDate?.toString() ?? new Date()));
-
   return (
     <Box as="section" mt="0.25rem" aria-labelledby="movie-details">
       <Flex mb="2" gap={'2'}>
         <Text fontWeight="semibold" color="gray.700" id="release-date">
           Release Date:
         </Text>
-        <Text>{date}</Text>
+        <Text>{dateFormatter(releaseDate)}</Text>
       </Flex>
 
       {usCertificates && usCertificates.length > 0 && (

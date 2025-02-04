@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT'; // Extendable
+export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT';
 
-// this would normally be in a .env file, see more about reasoning for exposing this on README.md
 const API_URL = 'http://localhost:3000';
 
 type Props = {

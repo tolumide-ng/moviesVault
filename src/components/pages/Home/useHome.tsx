@@ -23,7 +23,7 @@ export const useHome = (
 
   const [title, setTitle] = React.useState('');
   const [state, setState] = React.useState<Omit<FilterData, 'title'>>({
-    rating: Rating.Five,
+    rating: [],
     genres: [],
     usCertificates: [],
   });
