@@ -5,6 +5,7 @@ import { TopBar } from './components/organisms/TopBar/TopBar';
 const SpecificMovie = React.lazy(
   () => import('./components/pages/SpecificMovie/SpecificMovie'),
 );
+const Login = React.lazy(() => import('./components/pages/Login/Login'));
 
 export default function AppRouter() {
   return (
@@ -13,6 +14,7 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/movies/:id" element={<SpecificMovie />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
