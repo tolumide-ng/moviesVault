@@ -216,3 +216,6 @@ Solution:
   Why did that happen?: Well, it's possible that you had ran `docker-compose` earlier
 
 ## Recording
+
+1. [Desktop Screens](./public/DesktopScreens.mov)
+2. [Mobile Screens](./public/mobileScreens.mov)
