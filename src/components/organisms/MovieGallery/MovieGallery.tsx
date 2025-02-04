@@ -20,7 +20,7 @@ export function MovieGallery({ onClick, movie, isLoggedIn }: Readonly<Props>) {
         mb="4"
       >
         {movie?.images?.map((image, index) => (
-          <ListItem key={image} alignSelf="center">
+          <ListItem key={image} alignSelf="center" tabIndex={0}>
             <Image
               src={image}
               alt={`${movie?.title} ${index}`}
@@ -43,7 +43,7 @@ export function MovieGallery({ onClick, movie, isLoggedIn }: Readonly<Props>) {
         mb="1rem"
       >
         {movie?.genres?.map((genre) => (
-          <ListItem key={genre}>
+          <ListItem key={genre} tabIndex={0}>
             <Tag>{genre}</Tag>
           </ListItem>
         ))}

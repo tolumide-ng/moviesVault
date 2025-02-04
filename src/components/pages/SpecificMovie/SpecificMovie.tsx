@@ -69,7 +69,7 @@ export default function SpecificMovie() {
           </Box>
 
           <Box mb={8}>
-            <Heading as="h2" size="md" mb={4}>
+            <Heading as="h2" size="md" mb={4} tabIndex={0}>
               Description
             </Heading>
             <Text mb={4}>{movie?.description}</Text>

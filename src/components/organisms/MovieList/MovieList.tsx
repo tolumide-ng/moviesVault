@@ -1,4 +1,4 @@
-import { ListItem, UnorderedList } from '@chakra-ui/react';
+import { ListItem, UnorderedList, Link as ChakraLink } from '@chakra-ui/react';
 import * as React from 'react';
 import { Link } from 'react-router';
 import MovieCard from '../MovieCard/MovieCard';
@@ -32,17 +32,21 @@ function MovieList({
           flexDirection="column"
           alignItems="center"
           p={2}
+          tabIndex={-1}
         >
-          <Link
+          <ChakraLink
+            as={Link}
             to={`/movies/${movie.id}`}
             aria-label={`Go to details for ${movie.title}`}
+            tabIndex={0}
+            _focus={{ outline: '2px solid blue.100', outlineOffset: '2px' }}
           >
             <MovieCard
               movie={movie}
               onClick={toggleFavoriteMovie}
               isLoggedIn={isLoggedIn}
             />
-          </Link>
+          </ChakraLink>
         </ListItem>
       ))}
     </UnorderedList>

@@ -3,7 +3,7 @@ import type { Config } from 'jest';
 export const config: Config = {
   preset: 'ts-jest/presets/default-esm',
   moduleDirectories: ['node_modules', '<rootDir>/'],
-  testEnvironment: 'jsdom',
+  testEnvironment: 'jest-environment-jsdom',
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',

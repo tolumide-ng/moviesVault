@@ -23,6 +23,7 @@ function MovieCard({ movie, onClick, isLoggedIn }: Readonly<Props>) {
       overflow="hidden"
       boxShadow="lg"
       width={{ base: '22rem', md: '23rem' }}
+      tabIndex={-1}
     >
       <Box position="relative">
         <Image
