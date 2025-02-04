@@ -5,6 +5,8 @@ import { MoviesContext, StoreMovies } from '@/store/movies/context';
 import { Movie } from '@/types/manual/movies';
 import { AuthorizationContext } from '@/store/authorization/context';
 import { Status } from '@/types/manual/status';
+import { TestWrapper } from '@/utils/testUtils';
+import { MemoryRouter } from 'react-router';
 
 const mockMovies = [
   { id: '1', title: 'Movie 1', favorite: false },
@@ -14,14 +16,14 @@ const mockMovies = [
 const moviesStoreContext = {
   currentPageMovies: mockMovies,
   currentPage: 1,
-  onPreviousPage: jest.fn(),
-  onNextPage: jest.fn(),
   onFilterChange: jest.fn(),
-  status: Status.Success,
+  onNextPage: jest.fn(),
+  onPreviousPage: jest.fn(),
   hasNextPage: true,
+  status: Status.Success,
 };
 
-const wrapper = (storeMovies: StoreMovies) =>
+const wrapper = (storeMovies: StoreMovies = moviesStoreContext) =>
   render(
     <MoviesContext.Provider value={storeMovies}>
       <AuthorizationContext.Provider
@@ -31,14 +33,35 @@ const wrapper = (storeMovies: StoreMovies) =>
           onLogout: jest.fn(),
         }}
       >
-        <Home />
+        <MemoryRouter>
+          <Home />
+        </MemoryRouter>
       </AuthorizationContext.Provider>
     </MoviesContext.Provider>,
   );
 
 describe('HomePage', () => {
   it('should render a list of movies', () => {
-    // wrapper({ ...moviesStoreContext, status: Status.Success });
-    // expect(screen.getByText('Next Page')).toBeVisible();
+    render(
+      <TestWrapper>
+        <Home />
+      </TestWrapper>,
+    );
+    expect(screen.getAllByText('Loading...')).toHaveLength(2);
+    expect(screen.getByRole('textbox', { name: 'Title' })).toBeVisible();
+    expect(screen.getAllByRole('combobox')).toHaveLength(2);
+    expect(screen.getByText('US Certificates')).toBeVisible();
+  });
+
+  it('should render the page when status is success', () => {
+    wrapper({ ...moviesStoreContext });
+
+    expect(screen.getByRole('button', { name: 'Next Page' })).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'Next Page' }),
+    ).not.toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: 'Previous Page' }),
+    ).toBeDisabled();
   });
 });
