@@ -11,7 +11,7 @@ import { AuthorizationContext } from '@/store/authorization/context';
 import { Loader } from '@/components/molecules/Loader/Loader';
 import { Notification } from '@/components/molecules/Notification/Notification';
 import { FavoriteMoviesContext } from '@/store/favorites/context';
-import { MovieDetail } from '@/components/molecules/MovieDetail/MovieDetail';
+import { MovieDetail } from '@/components/organisms/MovieDetail/MovieDetail';
 
 export default function SpecificMovie() {
   const { id } = useParams();
