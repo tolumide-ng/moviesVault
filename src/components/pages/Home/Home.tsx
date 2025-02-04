@@ -41,7 +41,7 @@ export default function Home() {
         isLoggedIn={isLoggedIn}
         toggleFavoriteMovie={toggleFavoriteMovie}
       />
-      {status === Status.Success && (
+      {status === Status.Success && !!movies.length && (
         <Stack
           direction="row"
           spacing={4}
@@ -69,6 +69,14 @@ export default function Home() {
             Next
           </Button>
         </Stack>
+      )}
+      {status === Status.Success && !movies.length && (
+        <Flex justify="center">
+          <Notification
+            title="Movies Empty"
+            message="There are no matching movies, please try again later"
+          />
+        </Flex>
       )}
       {status === Status.Loading && <Loader />}
       {status === Status.Error && (

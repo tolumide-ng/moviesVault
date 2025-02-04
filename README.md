@@ -139,6 +139,8 @@ docker-compose up
 sudo docker compose up
 ```
 
+Visit [`localhost:5173`](localhost:5173) on your favourite browser to view the application
+
 #### Using Docker Compose: Shutting down the Application
 
 1. Press `Cmd + C` on a MacOS or `Ctrl+ C` on Ubuntu to stop the application
