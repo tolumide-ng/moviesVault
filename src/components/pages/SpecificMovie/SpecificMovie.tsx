@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Box, Heading, Text, UnorderedList, ListItem } from '@chakra-ui/react';
 import { SpecificMovieContext } from '@/store/specificMovie/context';
 import { useParams } from 'react-router';
 import { Ratings } from '@/components/molecules/Ratings/Ratings';
 import { KeyValue } from '@/components/molecules/KeyValue/KeyValue';
-import { MovieGallery } from '@/components/organisms/MovieGallery/MovieGallery';
+import MovieGallery from '@/components/organisms/MovieGallery/MovieGallery';
 import { FavoriteMovie } from '@/types/manual/movies';
 import { Status } from '@/types/manual/status';
 import { AuthorizationContext } from '@/store/authorization/context';
@@ -33,18 +33,25 @@ export default function SpecificMovie() {
     fetchMovie(id!);
   }, [fetchMovie, id]);
 
-  function handleClickFavorite(movie: FavoriteMovie) {
-    if (movie.favorite) {
-      removeFavorite(movie.id);
-    } else {
-      addFavorite(movie);
-    }
-  }
+  const handleClickFavorite = useCallback(
+    (movie: FavoriteMovie) => {
+      if (movie.favorite) {
+        removeFavorite(movie.id);
+      } else {
+        addFavorite(movie);
+      }
+    },
+    [addFavorite, removeFavorite],
+  );
 
-  const modifiedMovie = {
-    ...movie,
-    favorite: favorites?.some((fav) => fav.id === movie?.id),
-  } as FavoriteMovie;
+  const modifiedMovie = useMemo(
+    () =>
+      ({
+        ...(movie ?? {}),
+        favorite: favorites?.some((fav) => fav.id === movie?.id),
+      } as FavoriteMovie),
+    [favorites, movie],
+  );
 
   return (
     <Box as="article" p={4}>
@@ -69,7 +76,7 @@ export default function SpecificMovie() {
           </Box>
 
           <Box mb={8}>
-            <Heading as="h2" size="md" mb={4} tabIndex={0}>
+            <Heading as="h2" size="md" mb={4}>
               Description
             </Heading>
             <Text mb={4}>{movie?.description}</Text>

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Box, Image, UnorderedList, ListItem, Tag } from '@chakra-ui/react';
 import { FavoriteMovie } from '@/types/manual/movies';
 import { FavoriteButton } from '@/components/molecules/FavoriteButton/FavoriteButton';
@@ -8,7 +9,9 @@ type Props = {
   isLoggedIn: boolean;
 };
 
-export function MovieGallery({ onClick, movie, isLoggedIn }: Readonly<Props>) {
+function MovieGallery({ onClick, movie, isLoggedIn }: Readonly<Props>) {
+  if (!movie) return null;
+
   return (
     <Box>
       <UnorderedList
@@ -19,8 +22,8 @@ export function MovieGallery({ onClick, movie, isLoggedIn }: Readonly<Props>) {
         listStyleType="none"
         mb="4"
       >
-        {movie?.images?.map((image, index) => (
-          <ListItem key={image} alignSelf="center" tabIndex={0}>
+        {movie.images?.map((image, index) => (
+          <ListItem key={image} alignSelf="center">
             <Image
               src={image}
               alt={`${movie?.title} ${index}`}
@@ -43,13 +46,15 @@ export function MovieGallery({ onClick, movie, isLoggedIn }: Readonly<Props>) {
         mb="1rem"
       >
         {movie?.genres?.map((genre) => (
-          <ListItem key={genre} tabIndex={0}>
+          <ListItem key={genre}>
             <Tag>{genre}</Tag>
           </ListItem>
         ))}
       </UnorderedList>
 
-      {isLoggedIn && <FavoriteButton onClick={onClick} movie={movie!} />}
+      {isLoggedIn && <FavoriteButton onClick={onClick} movie={movie} />}
     </Box>
   );
 }
+
+export default React.memo(MovieGallery);

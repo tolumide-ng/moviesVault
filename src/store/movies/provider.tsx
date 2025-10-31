@@ -30,44 +30,51 @@ export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
     [],
   );
 
-  const fetchMovies = React.useCallback(async () => {
-    setState((prevState) => ({ ...prevState, status: Status.Loading }));
+  const buildFilter = React.useCallback((filter: FilterData | null) => {
+    if (!filter) return {};
 
-    const modifiedFilter = Object.fromEntries(
-      Object.entries(state.filter ?? {}).map(([key, value]) => [
+    return Object.fromEntries(
+      Object.entries(filter).map(([key, value]) => [
         key === 'rating' ? `rating_in` : `${key}_like`,
         value,
       ]),
     );
+  }, []);
 
-    try {
-      const response = await apiCall<Array<Movie>>({
-        path: 'movies',
-        method: 'GET',
-        params: {
-          ...modifiedFilter,
-          _limit: MOVIES_PER_PAGE,
-          _start: (state.currentPage - 1) * MOVIES_PER_PAGE,
-        },
-      });
+  const fetchMovies = React.useCallback(
+    async (page: number, filter: FilterData | null) => {
+      setState((prevState) => ({ ...prevState, status: Status.Loading }));
 
-      setState((prevState) => ({
-        ...prevState,
-        status: Status.Success,
-        lastFetchedPage: state.currentPage,
-        moviesByPage: {
-          ...prevState.moviesByPage,
-          [state.currentPage]: response ?? [],
-        },
-      }));
-    } catch (error) {
-      setState((prevState) => ({
-        ...prevState,
-        status: Status.Error,
-        error: handleError(error),
-      }));
-    }
-  }, [state.currentPage, state.filter]);
+      try {
+        const response = await apiCall<Array<Movie>>({
+          path: 'movies',
+          method: 'GET',
+          params: {
+            ...buildFilter(filter),
+            _limit: MOVIES_PER_PAGE,
+            _start: (page - 1) * MOVIES_PER_PAGE,
+          },
+        });
+
+        setState((prevState) => ({
+          ...prevState,
+          status: Status.Success,
+          lastFetchedPage: page,
+          moviesByPage: {
+            ...prevState.moviesByPage,
+            [page]: response ?? [],
+          },
+        }));
+      } catch (error) {
+        setState((prevState) => ({
+          ...prevState,
+          status: Status.Error,
+          error: handleError(error),
+        }));
+      }
+    },
+    [buildFilter],
+  );
 
   const onFilterChange = React.useCallback(
     (filter: FilterData) => {
@@ -86,9 +93,13 @@ export const MoviesProvider = ({ children }: React.PropsWithChildren) => {
     [state.filter],
   );
 
+  // Fetch movies when page or filter changes
   React.useEffect(() => {
-    if (!state.moviesByPage[state.currentPage] && state.filter) {
-      fetchMovies();
+    const page = state.currentPage;
+    const filter = state.filter;
+
+    if (!state.moviesByPage[page] && filter) {
+      fetchMovies(page, filter);
     }
   }, [state.filter, state.currentPage, fetchMovies, state.moviesByPage]);
 

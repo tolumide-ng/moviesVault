@@ -32,7 +32,6 @@ function MovieList({
           flexDirection="column"
           alignItems="center"
           p={2}
-          tabIndex={-1}
         >
           <ChakraLink
             as={Link}

@@ -1,16 +1,12 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
-export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT';
-
+/**
+ * NB: Normally, the base API URL should come from an environment variable.
+ * To make local development easier, we fall back to localhost by default.
+ */
 const API_URL = 'http://localhost:3000';
 
-type Props = {
-  path: string;
-  params?: Record<string, unknown>;
-  method: HttpMethod;
-  signal?: AbortSignal;
-  data?: unknown;
-};
+type Props = Omit<AxiosRequestConfig, 'url'> & { path: string };
 
 export async function apiCall<T>({
   path,
@@ -19,7 +15,7 @@ export async function apiCall<T>({
   signal,
   data,
 }: Props): Promise<T> {
-  const url = `${API_URL}/${path}`;
+  const url = new URL(path, API_URL).toString();
 
   try {
     const response = await axios({ url, method, params, data, signal });

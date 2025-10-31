@@ -20,12 +20,12 @@ export default function Home() {
     status,
   } = React.useContext(MoviesContext);
 
-  const { searchBarOptions, onChange, onSelect, movies, toggleFavoriteMovie } =
-    useHome(onFilterChange, currentPageMovies);
-
   const {
     state: { isLoggedIn },
   } = React.useContext(AuthorizationContext);
+
+  const { searchBarOptions, onChange, onSelect, movies, toggleFavoriteMovie } =
+    useHome(onFilterChange, currentPageMovies);
 
   return (
     <Box as="article" p={4}>
@@ -43,6 +43,7 @@ export default function Home() {
       />
       {status === Status.Success && !!movies.length && (
         <Stack
+          as={'nav'}
           direction="row"
           spacing={4}
           justifyContent="center"
