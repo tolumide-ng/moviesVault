@@ -8,6 +8,7 @@ import { AuthorizationContext } from '@/store/authorization/context';
 import { Status } from '@/types/manual/status';
 import { TestWrapper } from '@/utils/testUtils';
 import { MemoryRouter } from 'react-router';
+import { FavoriteMoviesContext } from '@/store/favorites/context';
 
 const mockMovies = [
   { id: '1', title: 'Movie 1', favorite: false },
@@ -34,9 +35,17 @@ const wrapper = (storeMovies: StoreMovies = moviesStoreContext) =>
           onLogout: jest.fn(),
         }}
       >
-        <MemoryRouter>
-          <Home />
-        </MemoryRouter>
+        <FavoriteMoviesContext.Provider
+          value={{
+            favorites: [],
+            addFavorite: jest.fn(),
+            removeFavorite: jest.fn(),
+          }}
+        >
+          <MemoryRouter>
+            <Home />
+          </MemoryRouter>
+        </FavoriteMoviesContext.Provider>
       </AuthorizationContext.Provider>
     </MoviesContext.Provider>,
   );

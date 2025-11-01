@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FavoriteMoviesContext } from './context';
-import { favoritesReducer } from './reducer';
+import { ActionType, favoritesReducer } from './reducer';
 import { Movie } from '@/types/manual/movies';
 
 const FAVORITE_KEY = 'user_favs';
@@ -9,8 +9,7 @@ const loadFavorites = () => {
   try {
     const storedFavorites = localStorage.getItem(FAVORITE_KEY);
     return storedFavorites ? JSON.parse(storedFavorites) : [];
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (_error) {
+  } catch {
     return [];
   }
 };
@@ -33,15 +32,15 @@ export const FavoriteMovieProvider = ({
   }, [state]);
 
   const addFavorite = React.useCallback((movie: Movie) => {
-    dispatch({ type: 'ADD_FAVORITE', payload: movie });
+    dispatch({ type: ActionType.ADD_FAVORITE, payload: movie });
   }, []);
 
   const removeFavorite = React.useCallback((id: string) => {
-    dispatch({ type: 'REMOVE_FAVORITE', payload: { id } });
+    dispatch({ type: ActionType.REMOVE_FAVORITE, payload: { id } });
   }, []);
 
   React.useEffect(() => {
-    localStorage.setItem(FAVORITE_KEY, JSON.stringify(state));
+    saveFavorites(state);
   }, [state]);
 
   const valueProps = React.useMemo(

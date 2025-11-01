@@ -4,12 +4,17 @@ import HomePage from './components/pages/Home/Home';
 import { TopBar } from './components/organisms/TopBar/TopBar';
 import ProtectedRoute from './components/organisms/ProtectedRoute/ProtectedRoute';
 import { Loader } from './components/molecules/Loader/Loader';
+
 const SpecificMovie = React.lazy(
   () => import('./components/pages/SpecificMovie/SpecificMovie'),
 );
 const Login = React.lazy(() => import('./components/pages/Login/Login'));
 const Favorites = React.lazy(
   () => import('./components/pages/Favorites/Favorites'),
+);
+
+const NotFound = React.lazy(
+  () => import('./components/pages/NotFound/NotFound'),
 );
 
 export default function AppRouter() {
@@ -29,6 +34,7 @@ export default function AppRouter() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </React.Suspense>
     </BrowserRouter>

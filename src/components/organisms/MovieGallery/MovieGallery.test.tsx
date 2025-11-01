@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MovieGallery } from './MovieGallery';
+import MovieGallery from './MovieGallery';
 import { FavoriteMovie } from '@/types/manual/movies';
 
 describe('MovieGallery', () => {

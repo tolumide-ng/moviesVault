@@ -15,7 +15,7 @@ import { FavoriteMoviesContext } from '@/store/favorites/context';
 
 export const useHome = (
   onFilterChange: StoreMovies['onFilterChange'],
-  currentPageMovies: Array<Movie>,
+  currentPageMovies: Movie[],
 ) => {
   const { addFavorite, favorites, removeFavorite } = React.useContext(
     FavoriteMoviesContext,
@@ -29,13 +29,18 @@ export const useHome = (
   });
   const debouncedTitle = useDebounce(title, DEBOUNCE_DELAY);
 
+  const favoriteIds = React.useMemo(
+    () => new Set(favorites?.map((f) => f.id)),
+    [favorites],
+  );
+
   const movies = React.useMemo(
     () =>
       currentPageMovies?.map((movie) => ({
         ...movie,
-        favorite: favorites?.findIndex((fav) => fav.id === movie.id) > -1,
+        favorite: favoriteIds.has(movie.id),
       })),
-    [favorites, currentPageMovies],
+    [currentPageMovies, favoriteIds],
   );
 
   const ratingOptions = React.useMemo(
@@ -45,11 +50,11 @@ export const useHome = (
           return [...acc, { label, value }];
         }
         return acc;
-      }, [] as Array<SelectOption>),
+      }, [] as SelectOption[]),
     [],
   );
 
-  function toggleCertificate(value: string) {
+  const onToggleCertificate = React.useCallback((value: string) => {
     const certificate = value as UsCertificate;
     setState((prevState) => ({
       ...prevState,
@@ -57,9 +62,9 @@ export const useHome = (
         ? prevState['usCertificates'].filter((item) => item !== value)
         : [...prevState['usCertificates'], certificate],
     }));
-  }
+  }, []);
 
-  const searchBarOptions: Array<FormData> = React.useMemo(
+  const searchBarOptions: FormData[] = React.useMemo(
     () => [
       {
         name: 'title',
@@ -99,25 +104,22 @@ export const useHome = (
       const { name, value } = event.target;
 
       if (name === 'usCertificates') {
-        toggleCertificate(value);
+        onToggleCertificate(value);
       } else if (name === 'title') {
         setTitle(value);
       } else {
         setState((prevState) => ({ ...prevState, [name]: value }));
       }
     },
-    [],
+    [onToggleCertificate],
   );
 
-  const onSelect = React.useCallback(
-    (name: string, value: Array<SelectOption>) => {
-      setState((prevState) => ({
-        ...prevState,
-        [name]: value.map((data) => data.value),
-      }));
-    },
-    [],
-  );
+  const onSelect = React.useCallback((name: string, value: SelectOption[]) => {
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value.map((data) => data.value),
+    }));
+  }, []);
 
   const toggleFavoriteMovie = React.useCallback(
     (movie: FavoriteMovie) => {

@@ -10,6 +10,8 @@ type Props = {
 export function Notification({ title, message }: Readonly<Props>) {
   return (
     <Box
+      role="alert"
+      aria-live="assertive"
       bg="red.50"
       border="1px"
       borderColor="red.300"
